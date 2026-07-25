@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller('tweet')
+@Controller('tweets')
 export class TweetController {
   @Get()
-  getTweets(){
-    return "This action returns all tweets"
+  getTweets() {
+    return 'This action returns all tweets';
   }
 }
