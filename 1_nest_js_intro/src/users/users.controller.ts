@@ -5,12 +5,14 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -42,5 +44,11 @@ export class UsersController {
     const userService = new UsersService();
     // console.log(typeof id, id)
     return userService.getUserById(id);
+  }
+
+  @Patch()
+  updateUser(@Body() body: UpdateUserDto) {
+    console.log('Update user:', body);
+    return { message: 'User updated successfully' };
   }
 }

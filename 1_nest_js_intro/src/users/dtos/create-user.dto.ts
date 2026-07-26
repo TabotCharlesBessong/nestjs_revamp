@@ -13,7 +13,9 @@ export class CreateUserDto {
   id: number;
   @IsString()
   @IsNotEmpty()
-  @MinLength(3,{message:'Name should have a minimum length of 3 characters'})
+  @MinLength(3, {
+    message: 'Name should have a minimum length of 3 characters',
+  })
   name: string;
   @IsString()
   username: string;
