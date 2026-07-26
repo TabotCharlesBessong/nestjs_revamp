@@ -1,34 +1,46 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  getUsers(@Query() query: any) {
+  getUsers(
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('sort') sort: string,
+  ) {
+    const query = {
+      limit,
+      page,
+      sort,
+    };
     const userService = new UsersService();
     console.log(query);
     return userService.getAllUsers();
   }
 
   @Post()
-  createUser() {
+  createUser(@Body(new ValidationPipe()) newUser: CreateUserDto) {
     const userService = new UsersService();
-    const newUser = {
-      id: 3,
-      name: 'John',
-      username: 'johndoe',
-      email: 'johndoe@gmail.com',
-      age: 28,
-      gender: 'Female',
-      isMarried: false,
-    };
+    // console.log(newUser);
     return userService.createUser(newUser);
   }
 
   @Get(':id')
-  getSingleUser(@Param('id') id:any) {
+  getSingleUser(@Param('id', ParseIntPipe) id: number) {
     const userService = new UsersService();
-    // console.log(param)
-    return userService.getUserById(+id);
+    // console.log(typeof id, id)
+    return userService.getUserById(id);
   }
 }
