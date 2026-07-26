@@ -16,6 +16,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('users')
 export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
   @Get()
   getUsers(
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
@@ -27,23 +28,19 @@ export class UsersController {
       page,
       sort,
     };
-    const userService = new UsersService();
     console.log(query);
-    return userService.getAllUsers();
+    return this.usersService.getAllUsers();
   }
 
   @Post()
   createUser(@Body(new ValidationPipe()) newUser: CreateUserDto) {
-    const userService = new UsersService();
     // console.log(newUser);
-    return userService.createUser(newUser);
+    return this.usersService.createUser(newUser);
   }
 
   @Get(':id')
   getSingleUser(@Param('id', ParseIntPipe) id: number) {
-    const userService = new UsersService();
-    // console.log(typeof id, id)
-    return userService.getUserById(id);
+    return this.usersService.getUserById(id);
   }
 
   @Patch()
