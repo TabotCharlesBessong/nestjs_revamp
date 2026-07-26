@@ -1,11 +1,12 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   @Get()
-  getUsers() {
+  getUsers(@Query() query: any) {
     const userService = new UsersService();
+    console.log(query);
     return userService.getAllUsers();
   }
 
@@ -22,5 +23,12 @@ export class UsersController {
       isMarried: false,
     };
     return userService.createUser(newUser);
+  }
+
+  @Get(':id')
+  getSingleUser(@Param('id') id:any) {
+    const userService = new UsersService();
+    // console.log(param)
+    return userService.getUserById(+id);
   }
 }
