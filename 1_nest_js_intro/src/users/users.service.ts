@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 export interface User {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
   email: string;
   age: number;
@@ -15,7 +16,8 @@ export class UsersService {
   private users: User[] = [
     {
       id: 1,
-      name: 'Alice',
+      firstName: 'Alice',
+      lastName: 'Smith',
       username: 'alice01',
       email: 'alice@example.com',
       age: 28,
@@ -24,7 +26,8 @@ export class UsersService {
     },
     {
       id: 2,
-      name: 'Bob',
+      firstName: 'Bob',
+      lastName: 'Johnson',
       username: 'bob02',
       email: 'bob@example.com',
       age: 32,
