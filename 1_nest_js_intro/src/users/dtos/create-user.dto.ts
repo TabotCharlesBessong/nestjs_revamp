@@ -1,8 +1,6 @@
 import {
-  IsBoolean,
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
@@ -10,19 +8,21 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNumber()
-  id: number;
   @IsEmail()
   @MaxLength(100)
   email: string;
+
   @IsOptional()
   @MaxLength(30)
   @IsOptional()
   username: string;
-  @IsNumber()
+
+  @IsOptional()
   age: number;
-  @IsBoolean()
+
+  @IsOptional()
   isMarried: boolean;
+
   @IsString()
   @IsNotEmpty()
   @MinLength(6, {

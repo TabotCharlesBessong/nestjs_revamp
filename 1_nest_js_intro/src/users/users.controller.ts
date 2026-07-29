@@ -3,7 +3,8 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
-  // Param,
+  NotFoundException,
+  Param,
   ParseIntPipe,
   Patch,
   Post,
@@ -39,13 +40,19 @@ export class UsersController {
   }
 
   @Get(':id')
-  getSingleUser() {
-    // return this.usersService.getUserById(id);
+  async getSingleUser(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   @Patch(':id')
-  updateUser(@Body() body: UpdateUserDto) {
-    // update user based on id passed in the param
-    return this.usersService.updateUser(1, body);
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(id, body);
   }
 }
