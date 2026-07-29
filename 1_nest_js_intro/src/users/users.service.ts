@@ -1,52 +1,46 @@
 import { Injectable } from '@nestjs/common';
-
-export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  age: number;
-  gender: string;
-  isMarried: boolean;
-}
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [
-    {
-      id: 1,
-      firstName: 'Alice',
-      lastName: 'Smith',
-      username: 'alice01',
-      email: 'alice@example.com',
-      age: 28,
-      gender: 'Female',
-      isMarried: false,
-    },
-    {
-      id: 2,
-      firstName: 'Bob',
-      lastName: 'Johnson',
-      username: 'bob02',
-      email: 'bob@example.com',
-      age: 32,
-      gender: 'Male',
-      isMarried: true,
-    },
-  ];
-
-  getAllUsers(): User[] {
-    return this.users;
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+  getAllUsers() {
+    return this.userRepository.find();
   }
 
-  getUserById(id: number): User | undefined {
-    return this.users.find((user) => user.id === id);
+  getUserById(id: number) {
+    return this.userRepository.findOne({ where: { id } });
   }
 
-  createUser(user: Omit<User, 'id'>): User {
-    const newUser = { id: Date.now(), ...user };
-    this.users.push(newUser);
+  public async createUser(createDto: CreateUserDto) {
+    // validate if user exists
+    const userExists = await this.userRepository.findOne({
+      where: { email: createDto.email },
+    });
+
+    // handles error or exeception
+    if (userExists) {
+      throw new Error('User already exists');
+    }
+
+    // create the user and insert into the database
+    const newUser = this.userRepository.create(createDto);
+    await this.userRepository.save(newUser);
     return newUser;
+  }
+
+  public async updateUser(id: number, updateDto: Partial<CreateUserDto>) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    Object.assign(user, updateDto);
+    return this.userRepository.save(user);
   }
 }

@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { TweetModule } from './tweet/tweet.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { User } from './users/user.entity';
         password: 'Charles#123',
       }),
     }),
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

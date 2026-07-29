@@ -3,7 +3,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
-  Param,
+  // Param,
   ParseIntPipe,
   Patch,
   Post,
@@ -34,18 +34,18 @@ export class UsersController {
 
   @Post()
   createUser(@Body(new ValidationPipe()) newUser: CreateUserDto) {
-    // console.log(newUser);
+    // console.log('Create user:', newUser);
     return this.usersService.createUser(newUser);
   }
 
   @Get(':id')
-  getSingleUser(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.getUserById(id);
+  getSingleUser() {
+    // return this.usersService.getUserById(id);
   }
 
-  @Patch()
+  @Patch(':id')
   updateUser(@Body() body: UpdateUserDto) {
-    console.log('Update user:', body);
-    return { message: 'User updated successfully' };
+    // update user based on id passed in the param
+    return this.usersService.updateUser(1, body);
   }
 }
