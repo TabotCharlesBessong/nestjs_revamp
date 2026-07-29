@@ -1,22 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'varchar',
-    length: 100,
-    nullable: false,
-  })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   firstName: string;
 
-  @Column({
-    type: 'varchar',
-    length: 100,
-    nullable: false,
-  })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   lastName: string;
 
   @Column({ type: 'varchar', length: 10, nullable: true })
@@ -30,4 +29,8 @@ export class Profile {
 
   @Column({ type: 'text', nullable: true })
   profileImage: string;
+
+  @OneToOne(() => User, (user) => user.profile, { cascade: true })
+  @JoinColumn()
+  user: User;
 }
