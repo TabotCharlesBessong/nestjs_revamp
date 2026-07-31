@@ -31,6 +31,11 @@ export class TweetController {
     return this.tweetService.getTweetsByUserId(userid);
   }
 
+  @Get(':id/hashtags')
+  getHashtags(@Param('id', ParseIntPipe) id: number) {
+    return this.tweetService.getHashtagsByTweetId(id);
+  }
+
   @Post()
   create(@Body() createTweetDto: CreateTweetDto) {
     return this.tweetService.create(createTweetDto);
